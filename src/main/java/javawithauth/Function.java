@@ -67,21 +67,12 @@ public class Function {
 
         IAuthenticationResult result;
         try {
-            final SilentParameters silentParameters = SilentParameters.builder(SCOPE).build();
-
-            // try to acquire token silently. This call will fail since the token cache does
-            // not
-            // have a token for the application you are requesting an access token for
-            result = cca.acquireTokenSilently(silentParameters).join();
-        } catch (final Exception ex) {
-            if (ex.getCause() instanceof MsalException) {
-
-                final OnBehalfOfParameters parameters = OnBehalfOfParameters
+            final OnBehalfOfParameters parameters = OnBehalfOfParameters
                         .builder(SCOPE, new UserAssertion(authToken)).build();
-                result = cca.acquireToken(parameters).join();
-            } else {
+            result = cca.acquireToken(parameters).join();
+        } 
+        catch (final Exception ex) {
                 throw ex;
-            }
         }
         return result;
     }
@@ -95,6 +86,7 @@ public class Function {
                 .uri(URI.create("https://graph.microsoft.com/beta/me"))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
                 .header("Authorization", "Bearer " + authResult.accessToken())
                 .build();
 
