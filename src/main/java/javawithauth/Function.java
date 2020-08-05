@@ -55,8 +55,7 @@ public class Function {
         final Map<String, String> headers = request.getHeaders();
         final String authHeader = headers.get("authorization");
         final String[] authHeaderParts = authHeader.split(" ");
-        final String token = authHeaderParts[1];
-        return token;
+        return authHeaderParts[1];
     }
 
     private static IAuthenticationResult ValidateToken(final String authToken) throws Exception {
